@@ -7,7 +7,6 @@
     using Core.Validators;
     using Criteria;
     using Data;
-    using FluentValidation;
 
     public class PatientService : BaseService
     {
@@ -76,6 +75,33 @@
             };
             return this.Execute(func);
         }
-        
+
+        /// <summary>
+        /// Updates the first name of a patient.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="firstName">The first name.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <returns>ServiceResponse&lt;Patient&gt;.</returns>
+        public ServiceResponse<Patient> UpdateFirstName(int id, string firstName, string userName)
+        {
+            Func<Patient> func = delegate
+            {
+                using (var context = _contextFactory())
+                {
+                    var patient = context.Get<Patient>(id);
+                    if (patient == null)
+                        throw new ArgumentOutOfRangeException("Entity not found");
+
+                    patient.NameFirst = firstName;
+
+                    Authorize(patient, userName);
+                    Validate(patient, new PatientValidator());
+
+                    return context.Save(patient, userName);
+                }
+            };
+            return this.Execute(func);
+        }
     }
 }
