@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Net;
     using System.Web.Http;
     using Core;
     using Criteria;
@@ -21,14 +19,8 @@
         public Patient Get(int id)
         {
             var response = this.PatientService.Get(id);
-            if (response.HasError)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
-            if (response.Result == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            HttpAssert.Success(response);
+            HttpAssert.IsNotNull(response);
 
             return response.Result;
         }
@@ -39,11 +31,8 @@
         public Patient Update(Patient patient)
         {
             var response = this.PatientService.Save(patient, "");
-            if (response.HasError)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
-
+            HttpAssert.Success(response);
+            
             return response.Result;
         }
 
@@ -53,10 +42,7 @@
         public Patient UpdateFirstName(int id, [FromBody]string firstName)
         {
             var response = this.PatientService.UpdateFirstName(id, firstName, "");
-            if (response.HasError)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            HttpAssert.Success(response);
 
             return response.Result;
         }
@@ -67,10 +53,7 @@
         public IList<Patient> Find(PatientSearchCriteria criteria)
         {
             var response = this.PatientService.Find(criteria);
-            if (response.HasError)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            HttpAssert.Success(response);
 
             return response.Result;
         }
@@ -85,14 +68,8 @@
             HttpRequires.IsTrue(endDate >= startDate, "End Date must be greater than or equal to the Start Date");
 
             var response = PatientService.GetTrackingReport(id, startDate.Value, endDate.Value);
-            if (response.HasError)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
-            if (response.Result == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            HttpAssert.Success(response);
+            HttpAssert.IsNotNull(response);
 
             return response.Result;
         }

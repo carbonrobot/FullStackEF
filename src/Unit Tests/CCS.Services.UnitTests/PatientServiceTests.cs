@@ -58,5 +58,26 @@
             Assert.AreEqual(2, response.Result.Count);
         }
 
+        [TestMethod]
+        public void Can_Create_New_Patient()
+        {
+            _mockDataContext
+                .Setup(context => context.Save(patient, username))
+                .Returns(patient);
+
+            var response = _service.Save(patient, username);
+            Assert.IsFalse(response.HasError);
+        }
+
+        #region Test Data 
+
+        private const string username = "username";
+        private readonly Patient patient = new Patient()
+        {
+            NameFirst = "Sterling",
+            NameLast = "Archer"
+        };
+
+        #endregion
     }
 }
