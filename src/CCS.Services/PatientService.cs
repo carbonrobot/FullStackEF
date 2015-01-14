@@ -91,7 +91,7 @@
                 {
                     var patient = context.Get<Patient>(id);
                     if (patient == null)
-                        throw new ArgumentOutOfRangeException("Entity not found");
+                        throw new ArgumentOutOfRangeException("id", "Entity not found");
 
                     patient.NameFirst = firstName;
 
@@ -99,6 +99,29 @@
                     Validate(patient, new PatientValidator());
 
                     return context.Save(patient, userName);
+                }
+            };
+            return this.Execute(func);
+        }
+        
+        /// <summary>
+        /// Gets the tracking report for a given patient.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="start">The start.</param>
+        /// <param name="end">The end.</param>
+        /// <returns>ServiceResponse&lt;PatientTrackingReport&gt;.</returns>
+        public ServiceResponse<PatientTrackingReport> GetTrackingReport(int id, DateTime start, DateTime end)
+        {
+            Func<PatientTrackingReport> func = delegate
+            {
+                using (var context = _contextFactory())
+                {
+                    var patient = context.Get<Patient>(id);
+                    if (patient == null)
+                        throw new ArgumentOutOfRangeException("id", "Entity not found");
+
+                    return context.GetPatientTrackingReport(patient.InmateNumber, start, end);
                 }
             };
             return this.Execute(func);
