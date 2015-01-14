@@ -26,7 +26,7 @@
         {
             _mockDataContext
                 .Setup(context => context.Get<Patient>(12))
-                .Returns(new Patient(){ Id = 12 });
+                .Returns(TEST_PATIENT);
 
             var response = _service.Get(12);
             Assert.IsFalse(response.HasError);
@@ -62,18 +62,19 @@
         public void Can_Create_New_Patient()
         {
             _mockDataContext
-                .Setup(context => context.Save(patient, username))
-                .Returns(patient);
+                .Setup(context => context.Save(TEST_PATIENT, TEST_USER))
+                .Returns(TEST_PATIENT);
 
-            var response = _service.Save(patient, username);
+            var response = _service.Save(TEST_PATIENT, TEST_USER);
             Assert.IsFalse(response.HasError);
         }
 
         #region Test Data 
 
-        private const string username = "username";
-        private readonly Patient patient = new Patient()
+        private const string TEST_USER = "username";
+        private readonly Patient TEST_PATIENT = new Patient()
         {
+            Id = 12,
             NameFirst = "Sterling",
             NameLast = "Archer"
         };
