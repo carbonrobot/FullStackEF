@@ -4,6 +4,7 @@ namespace CCS.Services.WebApi
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using Exceptions;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -55,10 +56,20 @@ namespace CCS.Services.WebApi
         {
             if (response.HasError)
             {
-                var message = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                var message = new HttpResponseMessage();
+                if (response.Exception is FluentValidation.ValidationException)
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(response.Exception))
-                };
+                    var error = response.Exception as FluentValidation.ValidationException;
+                    message.StatusCode = HttpStatusCode.BadRequest;
+                    message.Content = new StringContent(JsonConvert.SerializeObject(new HttpValidationException(error)));
+                }
+                else
+                {
+                    var error = response.Exception.ToString();
+                    message.StatusCode = HttpStatusCode.InternalServerError;
+                    JsonConvert.SerializeObject(new HttpValidationException(error));
+                    message.Content = new StringContent(response.Exception.ToString());
+                }
                 throw new HttpResponseException(message);
             }
         }
