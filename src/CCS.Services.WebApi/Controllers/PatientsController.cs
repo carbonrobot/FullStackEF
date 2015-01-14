@@ -57,7 +57,7 @@
         }
 
         [HttpPost]
-        [Route("")]
+        [Route("{id}/firstName")]
         public Patient UpdateFirstName(int id, [FromBody]string firstName)
         {
             var response = this.PatientService.UpdateFirstName(id, firstName, "");
