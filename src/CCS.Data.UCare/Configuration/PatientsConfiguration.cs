@@ -52,6 +52,9 @@
             Property(x => x.LocOffsiteCode).HasColumnName("Loc_OffsiteCode").IsOptional().HasMaxLength(50);
             Property(x => x.EldoradoSsnId).HasColumnName("EldoradoSSN_Id").IsOptional().IsUnicode(false).HasMaxLength(50);
             Property(x => x.PreferredLanguageId).HasColumnName("PreferredLanguageId").IsOptional();
+
+            Ignore(x => x.LastModifiedUser);
+            Ignore(x => x.DateCreated);
         }
     }
 }
