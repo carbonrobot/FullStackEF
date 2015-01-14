@@ -20,7 +20,7 @@
 
         public DateTime? BirthDate { get; set; }
 
-        public virtual ICollection<Chart> Charts { get; set; }
+        public IList<Chart> Charts { get; set; }
 
         public string City { get; set; }
 
@@ -47,8 +47,6 @@
         public bool IsReleased { get; set; }
 
         public bool? IsSentenced { get; set; }
-
-        
 
         public string LocBed { get; set; }
 

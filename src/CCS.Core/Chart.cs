@@ -22,7 +22,7 @@
 
         public string LastModifiedUser { get; set; }
 
-        public virtual Patient Patient { get; set; }
+        public Patient Patient { get; set; }
 
         public int PatientId { get; set; }
 
